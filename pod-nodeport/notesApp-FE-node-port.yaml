@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: notesappfe-node-port
+
+spec:
+# used to direct incomming traffic to the appropriate pod
+  type: NodePort
+  ports:
+    # used to be accessed by other pod in the node
+    - port: 3050
+    # open up traffic to the container inside the notesApp-fe pod
+      targetPort: 4000
+    # used to access the container from browser (30000-32767), auto assigned if not specified
+      nodePort: 31515
+  # selector for our particular pod (send traffic to the "component: web", using label selector system)
+  selector: 
+    component: web

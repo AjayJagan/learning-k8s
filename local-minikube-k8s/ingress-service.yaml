@@ -1,0 +1,35 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+
+metadata:
+  name: ingress-service
+  annotations:
+    # we use nginx ingress
+    kubernetes.io/ingress.class: 'nginx'
+    # regex is allowed
+    nginx.ingress.kubernetes.io/use-regex: 'true'
+    # remove first part of the url
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    
+spec:
+  rules:
+    - http:
+        paths:
+          #start with / followed by anything
+          - path: /?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                # targets the clusterip of fe
+                name: notesapp-fe-clusterip-service
+                port:
+                  number: 4000
+          #start with /api followed by anything(redirects to server)
+          - path: /api/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                # targets the clusterip of be
+                name: notesapp-be-clusterip-service
+                port:
+                  number: 3000

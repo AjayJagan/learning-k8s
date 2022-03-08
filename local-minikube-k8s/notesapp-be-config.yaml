@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: notesapp-be-deployment
+
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      component: notesapp-be
+
+  template:
+    metadata:
+      labels:
+        component: notesapp-be
+
+    spec:
+      containers:
+        - name: notesapp-be
+          image: ajayjaganathan/notesapp-be:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: MONGO_HOST
+              # the name of the cluster can be used as host
+              value: mongo-clusterip-service
+            - name: MONGO_PORT
+              value: '27017'
+            - name: SERVER_PORT
+              value: '3000'
+            - name: MONGO_DB_NAME
+              value: NoteDB
+---
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: notesapp-be-clusterip-service
+
+spec:
+  type: ClusterIP
+  selector:
+    component: notesapp-be
+  ports:
+    - port: 3000
+      targetPort: 3000
+    

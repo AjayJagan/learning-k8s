@@ -1,0 +1,18 @@
+# specifies the api version - each version prodvides different objects
+apiVersion: v1
+# type of object
+kind: Pod
+# extra info on the pod
+metadata:
+  # name is the displayer name in stdout
+  name: notesappfe-pod
+  # labels are used for mapping purposes(networking)
+  labels:
+    component: web
+
+spec:
+  containers:
+    - name: notesapp-fe
+      image: ajayjaganathan/notesapp-fe
+      ports: 
+        - containerPort: 4000

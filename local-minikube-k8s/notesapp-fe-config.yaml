@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: notesapp-fe-deployment
+
+spec: 
+  replicas: 3
+  # selects the label in the template(choose all pods of matching label)
+  selector:
+    matchLabels:
+      component: notesapp-fe
+  # template of a pod
+  template:
+    metadata:
+      labels:
+        component: notesapp-fe
+    
+    spec:
+      containers:
+        - name: notesapp-fe
+          image: ajayjaganathan/notesapp-fe:latest
+          ports:
+            - containerPort: 4000
+---
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: notesapp-fe-clusterip-service
+# cluster ip (to find this deployment in the cluster)
+spec:
+  type: ClusterIP
+  selector:
+    component: notesapp-fe
+  ports:
+      # port which is used to find in the cluster
+    - port: 4000
+      # port used to direct external traffic
+      targetPort: 4000
+
+
+
+
+

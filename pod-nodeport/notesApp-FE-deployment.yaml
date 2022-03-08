@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+# extra data for deployment
+metadata:
+  name: notesappfe-deployment
+
+spec:
+  # number of pods that needs to be created
+  replicas: 1
+  # selector to make changes to a particular pod(can target any pod)
+  selector:
+    matchLabels:
+      component: web
+  # template for the pod
+  template:
+    metadata:
+      # if the label matches with the selector, then this will be managed by the deployment.
+      labels:
+        component: web
+
+    spec:
+      containers:
+        - name: notesappfe-pod
+          image: ajayjaganathan/notesapp-fe
+          ports:
+            - containerPort: 4000
+
+  
